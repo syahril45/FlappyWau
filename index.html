@@ -3,42 +3,41 @@
 <head>
     <title>Flappy Wau</title>
     <link rel="preload" href="SULAM.jar" as="fetch" crossorigin>
-    
     <script src="https://cjrtnc.leaningtech.com/3.0/loader.js"></script>
 </head>
-<body style="margin:0; background-color:black; color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; overflow:hidden; font-family:sans-serif;">
+<body style="margin:0; background-color:black; color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
 
     <div id="loading-message">
-        <h2>🎮 Loading Flappy Wau...</h2>
-        <p id="status">Waiting for engine...</p>
-        <p>Pre-loading 37MB game assets to save time...</p>
+        <h2>🎮 Flappy Wau</h2>
+        <p id="status">Starting System...</p>
     </div>
 
     <script>
-        async function startGame() {
-            // Check if engine is ready
-            if (typeof cheerpjInit === 'undefined') {
-                document.getElementById('status').innerText = "Engine script still downloading...";
-                setTimeout(startGame, 500);
-                return;
-            }
-
+        // This 'window.onload' waits until loader.js is 100% finished
+        window.onload = async function() {
+            const statusText = document.getElementById('status');
+            
             try {
-                document.getElementById('status').innerText = "Engine found! Initializing game...";
+                statusText.innerText = "Initializing Engine (Step 1/2)...";
+                // Initialize CheerpJ 3.0
                 await cheerpjInit();
                 
+                statusText.innerText = "Loading Game (Step 2/2)...";
+                // Create the display
+                cheerpjCreateDisplay(800, 600);
+                
+                // Run the 15MB JAR
+                // Make sure this matches the filename on GitHub exactly!
+                await cheerpjRunJar("/app/SULAM.jar");
+                
+                // If successful, hide the loading text
                 document.getElementById('loading-message').style.display = 'none';
                 
-                // Matches your GitHub filename exactly
-                cheerpjCreateDisplay(800, 600);
-                await cheerpjRunJar("/app/SULAM.jar");
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('status').innerText = "Error: " + error.message;
+            } catch (err) {
+                console.error(err);
+                statusText.innerText = "Execution Error: " + err.message;
             }
-        }
-
-        startGame();
+        };
     </script>
 </body>
 </html>
