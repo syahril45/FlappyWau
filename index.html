@@ -1,22 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Wau Bulan - SULAM</title>
+    <title>Flappy Wau</title>
     <script src="https://cjrtnc.leaningtech.com/3.0/loader.js"></script>
 </head>
-<body style="margin:0; background-color:#222; display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; color:white; font-family:sans-serif;">
-    
-    <div id="game-container"></div>
+<body style="margin:0; background-color:black; color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; overflow:hidden;">
+
+    <div id="loading-message">
+        <h2>🎮 Loading Flappy Wau...</h2>
+        <p>Please wait, downloading game assets (37MB)...</p>
+    </div>
 
     <script>
-        cheerpjInit();
-        // Creates a 600x800 area for your game
-        cheerpjCreateDisplay(600, 800, document.getElementById("game-container"));
-        // This runs your specific JAR
-        cheerpjRunJar("/app/SULAM.jar");
+        async function startGame() {
+            try {
+                // 1. Initialize the engine
+                await cheerpjInit();
+                
+                // 2. Hide the loading message once ready
+                document.getElementById('loading-message').style.display = 'none';
+                
+                // 3. Create the game screen (adjust width/height if needed)
+                cheerpjCreateDisplay(800, 600);
+                
+                // 4. Run your JAR file
+                await cheerpjRunJar("/app/SULAM.jar");
+            } catch (error) {
+                console.error("Error loading game:", error);
+            }
+        }
+
+        // Start the process
+        startGame();
     </script>
-    
-    <p>Loading Game Engine... Please wait.</p>
 </body>
 </html>
