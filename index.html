@@ -1,34 +1,49 @@
-<script>
-    async function startWhenReady() {
-        const statusText = document.getElementById('status');
-        
-        // 1. Check if the engine is ready. If not, wait and try again.
-        if (typeof cheerpjInit === 'undefined') {
-            console.log("CheerpJ not ready yet... retrying in 500ms");
-            setTimeout(startWhenReady, 500); 
-            return;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flappy Wau</title>
+    <link rel="preload" href="SULAM.jar" as="fetch" crossorigin>
+    <script src="https://cjrtnc.leaningtech.com/3.0/loader.js"></script>
+</head>
+<body style="margin:0; background-color:black; color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
+
+    <div id="loading-message" style="text-align:center;">
+        <h2>🎮 Flappy Wau</h2>
+        <p id="status">Loading Engine...</p>
+    </div>
+
+    <script>
+        async function initGame() {
+            const statusText = document.getElementById('status');
+            
+            // 1. Check if the engine is ready. If not, wait 1 second and try again.
+            if (typeof cheerpjInit === 'undefined') {
+                statusText.innerText = "Waiting for CheerpJ script to wake up...";
+                setTimeout(initGame, 1000);
+                return;
+            }
+
+            try {
+                statusText.innerText = "Engine found! Initializing...";
+                await cheerpjInit();
+                
+                statusText.innerText = "Launching Jar File...";
+                // Create game window
+                cheerpjCreateDisplay(800, 600);
+                
+                // Matches your 16.7MB file exactly
+                await cheerpjRunJar("/app/SULAM.jar");
+                
+                // Success! Hide the loader
+                document.getElementById('loading-message').style.display = 'none';S
+            } catch (err) {
+                console.error(err);
+                statusText.innerText = "Execution Error: " + err.message;
+            }
         }
 
-        try {
-            // 2. Start the engine
-            statusText.innerText = "Initializing Engine...";
-            await cheerpjInit();
-            
-            // 3. Setup the game display
-            statusText.innerText = "Launching Flappy Wau...";
-            cheerpjCreateDisplay(800, 600);
-            
-            // 4. Run your JAR file (Matches your 16.7MB download)
-            await cheerpjRunJar("/app/SULAM");
-            
-            // Hide loading message
-            document.getElementById('loading-message').style.display = 'none';
-        } catch (err) {
-            console.error("Startup Error:", err);
-            statusText.innerText = "Error: " + err.message;
-        }
-    }
-
-    // Start the check
-    startWhenReady();
-</script>
+        // Start the process
+        initGame();
+    </script>
+</body>
+</html>
