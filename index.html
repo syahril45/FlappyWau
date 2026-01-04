@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wau Bulan - SULAM</title>
+    <script src="https://cjrtnc.leaningtech.com/3.0/loader.js"></script>
+</head>
+<body style="margin:0; background-color:#222; display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; color:white; font-family:sans-serif;">
+    
+    <div id="game-container"></div>
+
+    <script>
+        cheerpjInit();
+        // Creates a 600x800 area for your game
+        cheerpjCreateDisplay(600, 800, document.getElementById("game-container"));
+        // This runs your specific JAR
+        cheerpjRunJar("/app/SULAM.jar");
+    </script>
+    
+    <p>Loading Game Engine... Please wait.</p>
+</body>
+</html>
