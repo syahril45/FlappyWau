@@ -1,31 +1,34 @@
 <script>
-    async function initGame() {
+    async function startWhenReady() {
         const statusText = document.getElementById('status');
         
-        // 1. Wait until 'cheerpjInit' exists in the browser's memory
+        // 1. Check if the engine is ready. If not, wait and try again.
         if (typeof cheerpjInit === 'undefined') {
-            console.log("Engine script not ready yet, retrying...");
-            setTimeout(initGame, 500); // Check again in half a second
+            console.log("CheerpJ not ready yet... retrying in 500ms");
+            setTimeout(startWhenReady, 500); 
             return;
         }
 
         try {
-            statusText.innerText = "Initializing Engine (Step 1/2)...";
+            // 2. Start the engine
+            statusText.innerText = "Initializing Engine...";
             await cheerpjInit();
             
-            statusText.innerText = "Loading Game (Step 2/2)...";
+            // 3. Setup the game display
+            statusText.innerText = "Launching Flappy Wau...";
             cheerpjCreateDisplay(800, 600);
             
-            // This matches your successfully downloaded file
+            // 4. Run your JAR file (Matches your 16.7MB download)
             await cheerpjRunJar("/app/SULAM.jar");
             
+            // Hide loading message
             document.getElementById('loading-message').style.display = 'none';
         } catch (err) {
-            console.error(err);
-            statusText.innerText = "Execution Error: " + err.message;
+            console.error("Startup Error:", err);
+            statusText.innerText = "Error: " + err.message;
         }
     }
 
-    // Start the checking process
-    initGame();
+    // Start the check
+    startWhenReady();
 </script>
