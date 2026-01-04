@@ -4,33 +4,41 @@
     <title>Flappy Wau</title>
     <script src="https://cjrtnc.leaningtech.com/3.0/loader.js"></script>
 </head>
-<body style="margin:0; background-color:black; color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; overflow:hidden;">
+<body style="margin:0; background-color:black; color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; overflow:hidden; font-family:sans-serif;">
 
     <div id="loading-message">
         <h2>🎮 Loading Flappy Wau...</h2>
-        <p>Please wait, downloading game assets (37MB)...</p>
+        <p id="status">Waiting for engine...</p>
+        <p>Your game is 37MB. This may take a minute.</p>
     </div>
 
     <script>
         async function startGame() {
+            // Check if cheerpjInit is available, if not, wait 500ms and try again
+            if (typeof cheerpjInit === 'undefined') {
+                document.getElementById('status').innerText = "Engine script still downloading...";
+                setTimeout(startGame, 500);
+                return;
+            }
+
             try {
-                // 1. Initialize the engine
+                document.getElementById('status').innerText = "Engine found! Initializing...";
                 await cheerpjInit();
                 
-                // 2. Hide the loading message once ready
                 document.getElementById('loading-message').style.display = 'none';
                 
-                // 3. Create the game screen (adjust width/height if needed)
+                // Creates the game window
                 cheerpjCreateDisplay(800, 600);
                 
-                // 4. Run your JAR file
+                // Runs your "SULAM" file exactly as named in your folder
                 await cheerpjRunJar("/app/SULAM");
             } catch (error) {
                 console.error("Error loading game:", error);
+                document.getElementById('status').innerText = "Error: " + error.message;
             }
         }
 
-        // Start the process
+        // Run the start function immediately
         startGame();
     </script>
 </body>
