@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Flappy Wau</title>
+    <link rel="preload" href="SULAM.jar" as="fetch" crossorigin>
+    
     <script src="https://cjrtnc.leaningtech.com/3.0/loader.js"></script>
 </head>
 <body style="margin:0; background-color:black; color:white; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; overflow:hidden; font-family:sans-serif;">
@@ -9,12 +11,12 @@
     <div id="loading-message">
         <h2>🎮 Loading Flappy Wau...</h2>
         <p id="status">Waiting for engine...</p>
-        <p>Your game is 37MB. This may take a minute.</p>
+        <p>Pre-loading 37MB game assets to save time...</p>
     </div>
 
     <script>
         async function startGame() {
-            // Check if cheerpjInit is available, if not, wait 500ms and try again
+            // Check if engine is ready
             if (typeof cheerpjInit === 'undefined') {
                 document.getElementById('status').innerText = "Engine script still downloading...";
                 setTimeout(startGame, 500);
@@ -22,23 +24,20 @@
             }
 
             try {
-                document.getElementById('status').innerText = "Engine found! Initializing...";
+                document.getElementById('status').innerText = "Engine found! Initializing game...";
                 await cheerpjInit();
                 
                 document.getElementById('loading-message').style.display = 'none';
                 
-                // Creates the game window
+                // Matches your GitHub filename exactly
                 cheerpjCreateDisplay(800, 600);
-                
-                // Runs your "SULAM" file exactly as named in your folder
                 await cheerpjRunJar("/app/SULAM.jar");
             } catch (error) {
-                console.error("Error loading game:", error);
+                console.error("Error:", error);
                 document.getElementById('status').innerText = "Error: " + error.message;
             }
         }
 
-        // Run the start function immediately
         startGame();
     </script>
 </body>
